@@ -156,7 +156,7 @@
     {
       base: 'jacred_xyz',
       name: 'Jacred.xyz (Mirror11T)',
-      settings: { url: 'jacred.xyz', key: '', parser_torrent_type: 'jackett' }
+      settings: { url: 'jac.red', key: '', parser_torrent_type: 'jackett' }
     },
     {
       base: 'maxvol_pro',
