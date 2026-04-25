@@ -316,12 +316,12 @@ var countryNames = {
         return countryNames[code] || Lampa.Lang.translate(code) || iso;
     }
 
-    function renderHybridTitle(render, ukTitle, enTitle, hasLogo, year, country) {
+    function renderHybridTitle(render, ruTitle, enTitle, hasLogo, year, country) {
         if (!render) return;
         $(".plugin-hybrid-title", render).remove();
         var mode = Lampa.Storage.get('hybrid_title_mode', 'smart');
         var sizeKey = Lampa.Storage.get('hybrid_title_size', 'm');
-        var displayTitle = (mode === 'smart' && hasLogo) ? enTitle : ukTitle;
+        var displayTitle = (mode === 'smart' && hasLogo) ? enTitle : ruTitle;
         if (!displayTitle || displayTitle === "undefined") displayTitle = "";
 
         var sizes = {
@@ -354,7 +354,7 @@ var countryNames = {
         var now = Date.now();
 
         if (cached && (now - cached.timestamp < 2592000000)) {
-            renderHybridTitle(render, cached.ukTitle, cached.enTitle, cached.hasLogo, cached.year, cached.country);
+            renderHybridTitle(render, cached.ruTitle, cached.enTitle, cached.hasLogo, cached.year, cached.country);
             return;
         }
 
