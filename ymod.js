@@ -310,7 +310,7 @@ var countryNames = {
         }
     }
 
-    function getCountryUA(iso) {
+    function getCountryRU(iso) {
         if (!iso) return '';
         var code = iso.toLowerCase().trim();
         return countryNames[code] || Lampa.Lang.translate(code) || iso;
@@ -359,18 +359,18 @@ var countryNames = {
         }
 
         var type = card.first_air_date ? "tv" : "movie";
-        var url = "https://api.themoviedb.org/3/" + type + "/" + card.id + "?api_key=" + Lampa.TMDB.key() + "&append_to_response=translations,images&include_image_language=uk,en,null";
+        var url = "https://api.themoviedb.org/3/" + type + "/" + card.id + "?api_key=" + Lampa.TMDB.key() + "&append_to_response=translations,images&include_image_language=ru,en,null";
 
         $.getJSON(url, function (data) {
-            var hasUkrainianLogo = false;
+            var hasRussianLogo = false;
             if (data.images && data.images.logos) {
-                hasUkrainianLogo = data.images.logos.some(function (l) { return l.iso_639_1 === "uk"; });
+                hasRussianLogo = data.images.logos.some(function (l) { return l.iso_639_1 === "ru"; });
             }
             var originalName = data.original_title || data.original_name || card.original_title || card.original_name || "";
             var enTitle = data.title || data.name || originalName;
-            var ukTitle = enTitle;
+            var ruTitle = enTitle;
             if (data.translations && data.translations.translations) {
-                var translation = data.translations.translations.find(function (t) { return t.iso_3166_1 === "UA" || t.iso_639_1 === "uk"; });
+                var translation = data.translations.translations.find(function (t) { return t.iso_3166_1 === "RU" || t.iso_639_1 === "ru"; });
                 if (translation) ukTitle = translation.data.title || translation.data.name || enTitle;
             }
             var dateStr = data.release_date || data.first_air_date || "";
@@ -378,9 +378,9 @@ var countryNames = {
             var countryList = (data.production_countries ||[]).map(function (c) { return getCountryUA(c.iso_3166_1); });
             var countryString = countryList.join(" / ");
 
-            titleCache[card.id] = { ukTitle: ukTitle || "", enTitle: enTitle || "", hasLogo: hasUkrainianLogo, year: year || "", country: countryString || "", timestamp: now };
+            titleCache[card.id] = { ruTitle: ruTitle || "", enTitle: enTitle || "", hasLogo: hasRussianLogo, year: year || "", country: countryString || "", timestamp: now };
             Lampa.Storage.set("title_cache_hybrid_v3", titleCache);
-            renderHybridTitle(render, ukTitle, enTitle, hasUkrainianLogo, year, countryString);
+            renderHybridTitle(render, ruTitle, enTitle, hasRussianLogo, year, countryString);
         }).fail(function() {
             var fallbackTitle = card.title || card.name || card.original_title || "";
             renderHybridTitle(render, fallbackTitle, fallbackTitle, false, "", "");
@@ -608,7 +608,7 @@ var countryNames = {
             var type = card.first_air_date ? "tv" : "movie";
             Lampa.Api.sources.tmdb.get(type + "/" + card.id + "?append_to_response=translations", {}, function (data) {
                 var tr = data.translations ? data.translations.translations :[];
-                var found = tr.find(function (t) { return t.iso_3166_1 === "UA" || t.iso_639_1 === "uk"; });
+                var found = tr.find(function (t) { return t.iso_3166_1 === "RU" || t.iso_639_1 === "ru"; });
                 var uk = found ? (found.data.title || found.data.name) : (card.title || card.name);
                 studiosCache[card.id] = { uk_title: uk, full_data: data, timestamp: now };
                 renderStudiosTitle(render, uk, data);
@@ -626,11 +626,11 @@ var countryNames = {
     }
 
     function getBestAndPopular(results, movie) {
-        if (!results || !Array.isArray(results)) return { ukr: false };
+        if (!results || !Array.isArray(results)) return { ru: false };
         
-        // ВАЖЛИВО: Надійний, суворий вираз з межами слів, щоб уникнути російських фільмів
-        var ukrPattern = /(^|[^а-яёієґїa-z])(ukr|ukrainian|українськ[а-яёієґї]*|укр|ua|укрдубляж|укрпереклад|укрмов[а-яёієґї]*)($|[^а-яёієґїa-z])/i;
-        var ukrResults =[];
+        // Поиск русского дубляжа/озвучки
+        var ruPattern = /(^|[^а-яёa-z])(rus|dub|dubbing|дубляж|полное|лицензия|rusdub|озвучка)($|[^а-яёa-z])/i;
+        var ruResults =[];
         var movieYear = parseInt(movie.release_date || movie.first_air_date || movie.year || 0);
         var isTv = !!(movie.name || movie.first_air_date); 
 
