@@ -903,15 +903,15 @@ var countryNames = {
         addSelect('ym_title', "hybrid_title_size", "Розмір", "", { 'xs': 'Дуже мала', 's': 'Мала', 'm': 'Нормальна (стандарт)', 'l': 'Велика', 'xl': 'Дуже велика', 'xxl': 'Максимальна', 'giant': 'Гігантська' }, 'xs');
         clearCacheBtn('ym_title', "Очистити кеш назв", "title_cache_hybrid_v3");
 
-        addStatic(MAIN_C, "ym_ratings_entry", "Рейтинги (OMDB/MDBList)", "Налаштування додаткових оцінок", function() { Lampa.Settings.create('ym_ratings'); });
+        addStatic(MAIN_C, "ym_ratings_entry", "Рейтинги (OMDB/MDBList)", "Настройка дополнительных оценок", function() { Lampa.Settings.create('ym_ratings'); });
         backTo('ym_ratings', MAIN_C);
-        addToggle('ym_ratings', 'ratings', "Увімкнути плагін", "Відображати зовнішні рейтинги");
+        addToggle('ym_ratings', 'ratings', "Включить плагин", "Отображать внешние рейтинги");
         
         Lampa.SettingsApi.addParam({ component: 'ym_ratings', param: { name: "omdb_api_key_set", type: "static" }, field: { name: "OMDB API Key", description: "Встановити ключ" }, onRender: function (item) {
-            var valEl = $('<div class="omdb-api-val">' + (Lampa.Storage.get('omdb_api_key', '') || 'Не встановлено') + '</div>');
+            var valEl = $('<div class="omdb-api-val">' + (Lampa.Storage.get('omdb_api_key', '') || 'Не установлено') + '</div>');
             item.find('.settings-param__descr').after(valEl);
             item.on('hover:enter', function() {
-                Lampa.Input.edit({ title: 'OMDB API Key', value: Lampa.Storage.get('omdb_api_key', ''), free: true, nosave: true }, function(newValue) { Lampa.Storage.set('omdb_api_key', newValue); valEl.text(newValue || 'Не встановлено'); });
+                Lampa.Input.edit({ title: 'OMDB API Key', value: Lampa.Storage.get('omdb_api_key', ''), free: true, nosave: true }, function(newValue) { Lampa.Storage.set('omdb_api_key', newValue); valEl.text(newValue || 'Не установлено'); });
             });
         }});
         Lampa.SettingsApi.addParam({ component: 'ym_ratings', param: { name: "mdblist_api_key_set", type: "static" }, field: { name: "MDBList API Key", description: "Встановити ключ" }, onRender: function (item) {
@@ -921,30 +921,30 @@ var countryNames = {
                 Lampa.Input.edit({ title: 'MDBList API Key', value: Lampa.Storage.get('omdb_mdblist_api_key', ''), free: true, nosave: true }, function(newValue) { Lampa.Storage.set('omdb_mdblist_api_key', newValue); valEl.text(newValue || 'Не встановлено'); });
             });
         }});
-        addSelect('ym_ratings', 'omdb_rating_size', 'Розмір рейтингів', '', { '0.5em': 'XS', '0.8em': 'S', '1.1em': 'M (Стандарт)', '1.5em': 'L', '2.0em': 'XL' }, '1.1em');
-        addSelect('ym_ratings', 'omdb_rating_gap', 'Відстань між рейтингами', '', { '0px': '0', '0.2em': '0.2em', '0.5em': '0.5em (Стандарт)', '1em': '1em', '1.5em': '1.5em', '2em': '2em' }, '0.5em');
-        addSelect('ym_ratings', 'omdb_rating_margin', 'Відступ до інших рядків', '', { '-1em': '-1em', '-0.5em': '-0.5em', '0px': '0', '10px': '10px (Стандарт)', '0.5em': '0.5em', '1em': '1em', '1.5em': '1.5em', '2em': '2em' }, '10px');
-        addSelect('ym_ratings', 'omdb_rating_saturation', 'Насиченість', '', { '100%': '100% (Стандарт)', '75%': '75%', '50%': '50%', '25%': '25%', '0%': '0% (Ч/Б)' }, '75%');
-        addStatic('ym_ratings', "omdb_select_ratings", "Вибір рейтингів", "Вкл/Викл джерел", function() { Lampa.Settings.create('ym_ratings_select'); });
+        addSelect('ym_ratings', 'omdb_rating_size', 'Размер рейтингов', '', { '0.5em': 'XS', '0.8em': 'S', '1.1em': 'M (Стандарт)', '1.5em': 'L', '2.0em': 'XL' }, '1.1em');
+        addSelect('ym_ratings', 'omdb_rating_gap', 'Расстояние между рейтингами', '', { '0px': '0', '0.2em': '0.2em', '0.5em': '0.5em (Стандарт)', '1em': '1em', '1.5em': '1.5em', '2em': '2em' }, '0.5em');
+        addSelect('ym_ratings', 'omdb_rating_margin', 'Отступ к другим строкам', '', { '-1em': '-1em', '-0.5em': '-0.5em', '0px': '0', '10px': '10px (Стандарт)', '0.5em': '0.5em', '1em': '1em', '1.5em': '1.5em', '2em': '2em' }, '10px');
+        addSelect('ym_ratings', 'omdb_rating_saturation', 'Насыщенность', '', { '100%': '100% (Стандарт)', '75%': '75%', '50%': '50%', '25%': '25%', '0%': '0% (Ч/Б)' }, '75%');
+        addStatic('ym_ratings', "omdb_select_ratings", "Выбор рейтингов", "Вкл/Выкл источников", function() { Lampa.Settings.create('ym_ratings_select'); });
         
         backTo('ym_ratings_select', 'ym_ratings');
         availableRatings.forEach(function(rating) {
             Lampa.SettingsApi.addParam({ component: 'ym_ratings_select', param: { name: 'omdb_rating_toggle_' + rating.key, type: 'trigger', default: rating.default }, field: { name: rating.name } });
         });
 
-        addStatic(MAIN_C, "ym_studios_entry", "Лого студій", "Відображення виробничих компаній", function() { Lampa.Settings.create('ym_studios'); });
+        addStatic(MAIN_C, "ym_studios_entry", "Лого студий", "Отображение производственных компаний", function() { Lampa.Settings.create('ym_studios'); });
         backTo('ym_studios', MAIN_C);
-        addToggle('ym_studios', 'studios', "Увімкнути плагін", "Відображати логотипи студій");
-        Lampa.SettingsApi.addParam({ component: 'ym_studios', param: { name: "studio_logo_bg", type: "trigger", default: true }, field: { name: "Підложка", description: "Напівпрозорий фон за логотипом" } });
-        addSelect('ym_studios', "studio_logo_size", "Розмір лого", "", { '0.5em':'0.5em', '0.6em':'0.6em', '0.7em':'0.7em (Стандарт)', '0.8em':'0.8em', '0.9em':'0.9em', '1.0em':'1.0em', '1.1em':'1.1em', '1.3em':'1.3em', '1.5em':'1.5em', '2.0em':'2.0em', '2.5em':'2.5em' }, '0.7em');
-        addSelect('ym_studios', "studio_logo_gap", "Відступ між лого", "", { '0px':'0', '0.2em':'0.2em', '0.5em':'0.5em', '1.0em':'1.0em', '1.2em':'1.2em', '1.5em':'1.5em', '2.0em':'2.0em' }, '0.2em');
-        addSelect('ym_studios', "studio_logo_saturation", "Насиченість", "", { '1': '100%', '0.75': '75%', '0.5': '50%', '0.25': '25%', '0': '0% (Ч/Б)' }, '1');
+        addToggle('ym_studios', 'studios', "Включить плагин", "Отображать логотипы студий");
+        Lampa.SettingsApi.addParam({ component: 'ym_studios', param: { name: "studio_logo_bg", type: "trigger", default: true }, field: { name: "Подложка", description: "Полупрозрачный фон по логотипу" } });
+        addSelect('ym_studios', "studio_logo_size", "Размер лого", "", { '0.5em':'0.5em', '0.6em':'0.6em', '0.7em':'0.7em (Стандарт)', '0.8em':'0.8em', '0.9em':'0.9em', '1.0em':'1.0em', '1.1em':'1.1em', '1.3em':'1.3em', '1.5em':'1.5em', '2.0em':'2.0em', '2.5em':'2.5em' }, '0.7em');
+        addSelect('ym_studios', "studio_logo_gap", "Отступление между лого", "", { '0px':'0', '0.2em':'0.2em', '0.5em':'0.5em', '1.0em':'1.0em', '1.2em':'1.2em', '1.5em':'1.5em', '2.0em':'2.0em' }, '0.2em');
+        addSelect('ym_studios', "studio_logo_saturation", "Насыщенность", "", { '1': '100%', '0.75': '75%', '0.5': '50%', '0.25': '25%', '0': '0% (Ч/Б)' }, '1');
 
-        addStatic(MAIN_C, "ym_uator_entry", "Uator", "Налаштування маркерів UA контенту", function() { Lampa.Settings.create('ym_uator'); });
-        backTo('ym_uator', MAIN_C);
-        addToggle('ym_uator', 'uator', "Увімкнути плагін", "Відображати значки торрентів");
-        addSelect('ym_uator', 'uator_saturation', 'Насиченість', '', { '100%': '100% (Стандарт)', '75%': '75%', '50%': '50%', '25%': '25%', '0%': '0% (Ч/Б)' }, '100%');
-        addSelect('ym_uator', 'uator_rating_size', 'Розмір значків', '', { '0.5em': 'XS', '0.8em': 'S', '1.1em': 'M (Стандарт)', '1.5em': 'L', '2.0em': 'XL' }, '1.1em');
+        addStatic(MAIN_C, "ym_rutor_entry", "Uator", "Настройка маркеров RU контента", function() { Lampa.Settings.create('ym_rutor'); });
+        backTo('ym_rutor', MAIN_C);
+        addToggle('ym_rutor', 'rutor', "Включить плагин", "Отображать значки торрентов");
+        addSelect('ym_rutor', 'rutor_saturation', 'Насыщенность', '', { '100%': '100% (Стандарт)', '75%': '75%', '50%': '50%', '25%': '25%', '0%': '0% (Ч/Б)' }, '100%');
+        addSelect('ym_rutor', 'rutor_rating_size', 'Размер значков', '', { '0.5em': 'XS', '0.8em': 'S', '1.1em': 'M (Стандарт)', '1.5em': 'L', '2.0em': 'XL' }, '1.1em');
     }
 
     if (window.appready) createSettings();
