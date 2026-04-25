@@ -43,34 +43,34 @@
         'mc': 6, 'trakt': 7, 'cub': 8, 'popcorn': 9, 'mdblist': 10, 'letterboxd': 11
     };
 
-    var availableRatings =[
+var availableRatings = [
         { key: 'tmdb', name: 'TMDB', default: true },
         { key: 'imdb', name: 'IMDb', default: true },
         { key: 'rt', name: 'Rotten Tomatoes', default: true },
         { key: 'mc', name: 'Metacritic', default: true },
         { key: 'trakt', name: 'Trakt TV', default: true },
         { key: 'cub', name: 'Lampa (CUB)', default: true },
-        { key: 'popcorn', name: 'RT Audience (Popcorn)', default: true },
+        { key: 'popcorn', name: 'RT Зрители (Popcorn)', default: true },
         { key: 'mdblist', name: 'MDBList Score', default: true },
         { key: 'letterboxd', name: 'Letterboxd', default: true },
-        { key: 'awards', name: 'Нагороди (Awards)', default: true }
+        { key: 'awards', name: 'Награды (Awards)', default: true }
     ];
 
-    var countryNames = {
-        'us': 'США', 'usa': 'США', 'gb': 'Велика Британія', 'uk': 'Велика Британія',
-        'ua': 'Україна', 'ca': 'Канада', 'hk': 'Гонконг', 'fr': 'Франція',
-        'de': 'Німеччина', 'it': 'Італія', 'es': 'Іспанія', 'jp': 'Японія',
-        'kr': 'Південна Корея', 'cn': 'Китай', 'pl': 'Польща', 'au': 'Австралія',
-        'ie': 'Ірландія', 'be': 'Бельгія', 'dk': 'Данія', 'no': 'Норвегія',
-        'se': 'Швеція', 'fi': 'Фінляндія', 'tr': 'Туреччина', 'in': 'Індія',
-        'br': 'Бразилія', 'mx': 'Мексика', 'nl': 'Нідерланди', 'at': 'Австрія',
-        'ch': 'Швейцарія', 'cz': 'Чехія', 'hu': 'Угорщина', 'nz': 'Нова Зеландія',
-        'za': 'ПАР', 'il': 'Ізраїль', 'th': 'Таїланд', 'tw': 'Тайвань', 
-        'ru': 'Країна-агресор', 'pt': 'Португалія', 'gr': 'Греція',
-        'is': 'Ісландія', 'ro': 'Румунія', 'bg': 'Болгарія',
-        'ar': 'Аргентина', 'cl': 'Чилі', 'co': 'Колумбія', 'pe': 'Перу',
-        'id': 'Індонезія', 'my': 'Малайзія', 'ph': 'Філіппіни', 'sg': 'Сінгапур',
-        'vn': 'В\'єтнам', 'ae': 'ОАЕ', 'sa': 'Саудівська Аравія', 'eg': 'Єгипет'
+var countryNames = {
+        'us': 'США', 'usa': 'США', 'gb': 'Великобритания', 'uk': 'Великобритания',
+        'ua': 'Украина', 'ca': 'Канада', 'hk': 'Гонконг', 'fr': 'Франция',
+        'de': 'Германия', 'it': 'Италия', 'es': 'Испания', 'jp': 'Япония',
+        'kr': 'Южная Корея', 'cn': 'Китай', 'pl': 'Польша', 'au': 'Австралия',
+        'ie': 'Ирландия', 'be': 'Бельгия', 'dk': 'Дания', 'no': 'Норвегия',
+        'se': 'Швеция', 'fi': 'Финляндия', 'tr': 'Турция', 'in': 'Индия',
+        'br': 'Бразилия', 'mx': 'Мексика', 'nl': 'Нидерланды', 'at': 'Австрия',
+        'ch': 'Швейцария', 'cz': 'Чехия', 'hu': 'Венгрия', 'nz': 'Новая Зеландия',
+        'za': 'ЮАР', 'il': 'Израиль', 'th': 'Таиланд', 'tw': 'Тайвань', 
+        'ru': 'Россия', 'pt': 'Португалия', 'gr': 'Греция',
+        'is': 'Исландия', 'ro': 'Румыния', 'bg': 'Болгария',
+        'ar': 'Аргентина', 'cl': 'Чили', 'co': 'Колумбия', 'pe': 'Перу',
+        'id': 'Индонезия', 'my': 'Малайзия', 'ph': 'Филиппины', 'sg': 'Сингапур',
+        'vn': 'Вьетнам', 'ae': 'ОАЭ', 'sa': 'Саудовская Аравия', 'eg': 'Египет'
     };
 
     var titleCache = Lampa.Storage.get("title_cache_hybrid_v3") || {};
@@ -226,7 +226,7 @@
 
         if (Lampa.Storage.get("logo_glav", "0") == "1") return;
 
-        var user_lang = Lampa.Storage.get("logo_lang", "uk");
+        var user_lang = Lampa.Storage.get("logo_lang", "ru");
         var target_lang = user_lang ? user_lang : Lampa.Storage.get("language");
         var size = Lampa.Storage.get("logo_size", "original");
         var cache_key = "logo_cache_v2_" + type + "_" + data.id + "_" + target_lang;
