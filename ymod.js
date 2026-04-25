@@ -731,24 +731,24 @@ var countryNames = {
         container.find('.qb-unified-block').remove();
         if (!data) return;
 
-        var size = Lampa.Storage.get('uator_rating_size', '1.1em');
-        var saturation = Lampa.Storage.get('uator_saturation', '100%');
+        var size = Lampa.Storage.get('rutor_rating_size', '1.1em');
+        var saturation = Lampa.Storage.get('rutor_saturation', '100%');
         var block = $('<div class="qb-unified-block" style="font-size: '+size+'"></div>');
         
-        if (!data.ukr) {
-            var iconHtml = (saturation === '0%') ? '<span class="qb-text-icon">UA</span>' : '<img src="'+uatorIcons.none+'" class="qb-prefix-icon" style="filter: saturate('+saturation+')">';
-            block.append('<div class="quality-badge qb-not-found">' + iconHtml + '<span class="qb-text">немає</span></div>');
+        if (!data.ru) {
+            var iconHtml = (saturation === '0%') ? '<span class="qb-text-icon">RU</span>' : '<img src="'+rutorIcons.none+'" class="qb-prefix-icon" style="filter: saturate('+saturation+')">';
+            block.append('<div class="quality-badge qb-not-found">' + iconHtml + '<span class="qb-text">нет</span></div>');
         } else {
-            var items =[ {i: uatorIcons.ua, t: data.bestRes, type: 'ua'}, {i: uatorIcons.top, t: data.popRes}, {i: uatorIcons.seeds, t: data.popSeeds} ];
-            if (data.tech.audio) items.push({i: uatorIcons.audio, t: data.tech.audio});
-            if (data.tech.dv) items.push({i: uatorIcons.dv, t: '', type: 'dv'});
-            if (data.tech.hdr) items.push({i: uatorIcons.hdr, t: '', type: 'hdr'});
+            var items =[ {i: rutorIcons.ua, t: data.bestRes, type: 'ru'}, {i: rutorIcons.top, t: data.popRes}, {i: rutorIcons.seeds, t: data.popSeeds} ];
+            if (data.tech.audio) items.push({i: rutorIcons.audio, t: data.tech.audio});
+            if (data.tech.dv) items.push({i: rutorIcons.dv, t: '', type: 'dv'});
+            if (data.tech.hdr) items.push({i: rutorIcons.hdr, t: '', type: 'hdr'});
             
             items.forEach(function(it) {
                 var iconHtml = '';
                 if (it.i) {
                     var style = 'filter: saturate('+saturation+');';
-                    if (it.type === 'ua' && saturation === '0%') iconHtml = '<span class="qb-text-icon">UA</span>';
+                    if (it.type === 'ru' && saturation === '0%') iconHtml = '<span class="qb-text-icon">RU</span>';
                     else {
                         if (it.type === 'dv') style = 'filter: brightness(0) invert(1);';
                         else if (it.type === 'hdr') style = 'filter: grayscale(1);';
@@ -763,35 +763,35 @@ var countryNames = {
     }
 
     function processUatorCards() {
-        if (!isEnabled('uator')) return;
+        if (!isEnabled('rutor')) return;
         $('.card:not(.qb-processed)').each(function() {
             var card = $(this);
             var movie = card.data('item');
             if (movie && movie.id) {
                 card.addClass('qb-processed');
                 var key = movie.id + '_' + (movie.title || movie.name);
-                if (uatorCache[key] && uatorCache[key].ukr) {
-                    renderUator(card.find('.card__view'), uatorCache[key]);
+                if (rutorCache[key] && rutorCache[key].ru) {
+                    renderRutor(card.find('.card__view'), rutorCache[key]);
                 } else {
                     var localSearch = movie.title || movie.name;
                     var origSearch = movie.original_title || movie.original_name;
                     
-                    // ПОДВІЙНИЙ ПОШУК
+                   // ДВОЙНОЙ ПОИСК
                     Lampa.Parser.get({ search: localSearch, movie: movie, page: 1 }, function(res) {
-                        var data = (res && res.Results) ? getBestAndPopular(res.Results, movie) : { ukr: false };
-                        if (data.ukr) { 
+                        var data = (res && res.Results) ? getBestAndPopular(res.Results, movie) : { ru: false };
+                        if (data.ru) { 
                             uatorCache[key] = data; 
-                            renderUator(card.find('.card__view'), data); 
+                            renderRutor(card.find('.card__view'), data); 
                         } else if (origSearch && origSearch !== localSearch) {
                             Lampa.Parser.get({ search: origSearch, movie: movie, page: 1 }, function(res2) {
-                                var data2 = (res2 && res2.Results) ? getBestAndPopular(res2.Results, movie) : { ukr: false };
+                                var data2 = (res2 && res2.Results) ? getBestAndPopular(res2.Results, movie) : { ru: false };
                                 uatorCache[key] = data2;
                                 if (data2.ukr) renderUator(card.find('.card__view'), data2);
-                            }, function() { uatorCache[key] = data; });
+                            }, function() { rutorCache[key] = data; });
                         } else {
-                            uatorCache[key] = data;
+                            rutorCache[key] = data;
                         }
-                    }, function() { uatorCache[key] = { ukr: false }; });
+                    }, function() { rutorCache[key] = { ru: false }; });
                 }
             }
         });
@@ -818,20 +818,20 @@ var countryNames = {
         var localSearch = movie.title || movie.name;
         var origSearch = movie.original_title || movie.original_name;
         
-        // ПОДВІЙНИЙ ПОШУК
+         // ДВОЙНОЙ ПОИСК
         Lampa.Parser.get({ search: localSearch, movie: movie, page: 1 }, function(res) {
-            var data = (res && res.Results) ? getBestAndPopular(res.Results, movie) : { ukr: false };
-            if (data.ukr) { 
-                renderUator(cont, data); 
+            var data = (res && res.Results) ? getBestAndPopular(res.Results, movie) : { ru: false };
+            if (data.ru) { 
+                renderRutor(cont, data); 
             } else if (origSearch && origSearch !== localSearch) {
                 Lampa.Parser.get({ search: origSearch, movie: movie, page: 1 }, function(res2) {
-                    var data2 = (res2 && res2.Results) ? getBestAndPopular(res2.Results, movie) : { ukr: false };
-                    renderUator(cont, data2);
-                }, function() { renderUator(cont, data); });
+                    var data2 = (res2 && res2.Results) ? getBestAndPopular(res2.Results, movie) : { ru: false };
+                    renderRutor(cont, data2);
+                }, function() { renderRutor(cont, data); });
             } else {
-                renderUator(cont, data);
+                renderRutor(cont, data);
             }
-        }, function() { renderUator(cont, { ukr: false }); });
+        }, function() { renderRutor(cont, { ru: false }); });
     }
 
     Lampa.Listener.follow('full', function(e) {
@@ -846,7 +846,7 @@ var countryNames = {
                 setTimeout(function() { handleRatings(e); }, 100);
                 setTimeout(function() { handleRatings(e); }, 1000);
             }
-            if (isEnabled('uator')) handleUatorFull(e);
+            if (isEnabled('rutor')) handleUatorFull(e);
         }
     });
 
@@ -854,11 +854,11 @@ var countryNames = {
         var MAIN_C = 'yariks_mod_main';
         Lampa.SettingsApi.addComponent({ component: MAIN_C, name: "Yarik's Mod", icon: yIcon });
         Lampa.SettingsApi.addComponent({ component: 'ym_logo', name: 'Лого (Smart)' });
-        Lampa.SettingsApi.addComponent({ component: 'ym_title', name: 'Додаткова назва' });
+        Lampa.SettingsApi.addComponent({ component: 'ym_title', name: 'Дополнительное название' });
         Lampa.SettingsApi.addComponent({ component: 'ym_ratings', name: 'OMDB & MDBList' });
-        Lampa.SettingsApi.addComponent({ component: 'ym_ratings_select', name: 'Вибір рейтингів' });
-        Lampa.SettingsApi.addComponent({ component: 'ym_studios', name: 'Лого студій' });
-        Lampa.SettingsApi.addComponent({ component: 'ym_uator', name: 'Uator' });
+        Lampa.SettingsApi.addComponent({ component: 'ym_ratings_select', name: 'Выбор рейтингов' });
+        Lampa.SettingsApi.addComponent({ component: 'ym_studios', name: 'Лого студий' });
+        Lampa.SettingsApi.addComponent({ component: 'ym_uator', name: 'Rutor' });
 
         function addStatic(comp, name, title, desc, onClick) {
             Lampa.SettingsApi.addParam({ component: comp, param: { name: name, type: "static" }, field: { name: title, description: desc }, onRender: function (item) { item.on("hover:enter", onClick); } });
@@ -870,15 +870,15 @@ var countryNames = {
             Lampa.SettingsApi.addParam({ component: comp, param: { name: name, type: "select", values: values, default: def }, field: { name: title, description: desc } });
         }
         function backTo(comp, target) {
-            addStatic(comp, comp+'_back', "Назад", "Повернутися", function() { Lampa.Settings.create(target); });
+            addStatic(comp, comp+'_back', "Назад", "Вернуться", function() { Lampa.Settings.create(target); });
         }
         function clearCacheBtn(comp, title, prefix) {
-            addStatic(comp, comp+'_clear', title, "Очистити кеш плагіну", function() {
+            addStatic(comp, comp+'_clear', title, "Очистить кэш плагина", function() {
                 for (var i = 0; i < localStorage.length; i++) {
                     var key = localStorage.key(i);
                     if (key && key.indexOf(prefix) !== -1) { localStorage.removeItem(key); i--; }
                 }
-                Lampa.Noty.show("Кеш очищено. Перезавантаження...");
+                Lampa.Noty.show("Кэш очищен. Перезагрузка...");
                 setTimeout(function() { window.location.reload(); }, 1000);
             });
         }
